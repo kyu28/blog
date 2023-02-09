@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8">
+<title>kyu9's blog</title>
+
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.0.3/dist/showdown.min.js"></script>
+<script>
+  var converter = new showdown.Converter();
+
+  function getList() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        list = JSON.parse(xhr.responseText);
+        for (var i = 0; i < list.length; ++i) {
+          document.getElementById("menu").innerHTML += '<li><a href="#top" onclick="loadContent(\'' + list[i].path + '\')">' + list[i].name + '</a></li>';
+        }
+      }
+    }
+    xhr.open("GET", "/list.json", true);
+    xhr.send();
+    loadContent("index.md");
+  }
+
+  function loadContent(path) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        document.getElementById("paragraph").innerHTML = converter.makeHtml(xhr.responseText);
+      }
+    }
+    xhr.open("GET", "/md/" + path, true);
+    xhr.send();
+  }
+</script>
+
+<style>
+  #title {
+    font-size: 8vh;
+    margin: 0 18vw;
+    display: block;
+    text-decoration: none;
+    text-shadow: 0 0 0.4vw #000;
+    color: #eee;
+  }
+  #subtitle {
+    margin: 0 18vw;
+    font-size: 2vh;
+    font-style: italic;
+    display: block;
+    color: white;
+  }
+  body {
+    margin: 0;
+    background-color: #eee;
+    caret-color: transparent;
+  }
+  header {
+    margin: 0;
+    height: 20vh;
+    padding: 1vh 0;
+    background-image: url("bg.jpg");
+    background-size: cover;
+    background-position: center;
+  }
+  nav {
+    float: left;
+    width: 15vw;
+    margin: 5vh 0 5vh 16vw;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+  }
+  article {
+    font-size: 0.8vw;
+    float: left;
+    width: 50vw;
+    margin: 5vh 0 5vh 1vw;
+    padding: 1%;
+    background-color: #fff;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
+    min-height: 55vh;
+    overflow: auto;
+  }
+  footer {
+    margin: 0;
+    padding: 1vh 0;
+    text-align: center;
+    height: 8vh;
+    clear: both;
+    background-color: #181818;
+    color: #ccc;
+  }
+  #menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+  }
+  li a {
+    display: block;
+    color: #000;
+    height: 4vh;
+    padding: 0.5em 0.5em;
+    font-size: 2vh;
+    overflow: hidden;
+    text-decoration:  none;
+    text-align: center;
+  }
+  li a:hover {
+    background-color: #ddd;
+  }
+
+  @media only screen and (max-width:  768px) {
+  #title {
+    margin: auto;
+    position: relative;
+    top: 50%;
+    transform: translate(0, -50%);
+    text-align: center;
+    font-size: 10vw;
+  }
+  #subtitle {
+    display: none;
+  }
+  nav {
+    margin: 3vh auto;
+    float: none;
+    width: 90vw;
+  }
+  article {
+    float: none;
+    width: 88vw;
+    height: auto;
+    margin: 1vh auto;
+    font-size: 3vw;
+  }
+  #paragraph {
+    margin: 0;
+  }
+  } 
+
+  @media (prefers-color-scheme: dark) {
+    html, body {
+      background-color: #101014;
+    }
+    article, nav, #menu {
+      border-color: #333;
+      background-color: #111;
+    }
+    #paragraph, li a {
+      color: #bbb;
+    }
+    li a:hover {
+      background-color: #333;
+    }
+  }
+</style>
+</head>
+<body onload="getList()">
+<header>
+  <a id="title" href="#top" onclick="loadContent('index.md')">Blog</a>
+  <h2 id="subtitle">A simple blog</h2>
+</header>
+
+<nav>
+  <ul id="menu"></ul>
+</nav>
+
+<article>
+  <p id="paragraph"></p>
+</article>
+
+<footer>
+  <a href="https://github.com/KilobY73/rand-guide" style="color: #fff">GitHub repo</a>
+  <p id="copyright" style="font-size: 1vh;">Copyright &copy; </p>
+</footer>
+</body>
+</html>
