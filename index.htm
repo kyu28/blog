@@ -35,6 +35,10 @@
     xhr.open("GET", "md/" + path, true);
     xhr.send();
   }
+
+  function goToTop() {
+    page_top.scrollIntoView({behavior: "smooth"});
+  }
 </script>
 
 <style>
@@ -115,6 +119,20 @@
   li a:hover {
     background-color: #ddd;
   }
+  #top_button {
+    display: block;
+    border-radius: 0.5vw;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #333;
+    background-color: #111;
+    color: #eee;
+    text-decoration:  none;
+    font-size: 4vh;
+    position: fixed;
+    right: 1vw;
+    bottom: 12vh;
+  }
 
   @media only screen and (max-width:  768px) {
   #title {
@@ -163,7 +181,7 @@
 </style>
 </head>
 <body onload="getList()">
-<header>
+<header id="page_top">
   <a id="title" href="#top" onclick="loadContent('index.md')">kyu28's blog</a>
   <h2 id="subtitle">A simple blog</h2>
 </header>
@@ -175,6 +193,7 @@
 <article>
   <p id="paragraph" class="markdown-body"></p>
 </article>
+<button id="top_button" onclick="goToTop()">&nbsp;^&nbsp;</button>
 
 <footer>
   <a href="https://github.com/kyu28/blog" style="color: #fff">GitHub repo</a>
