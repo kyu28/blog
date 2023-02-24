@@ -37,7 +37,7 @@
   }
 
   function goToTop() {
-    page_top.scrollIntoView({behavior: "smooth"});
+    window.scrollBy({top: -window.scrollY, left: 0, behavior: "smooth"});
   }
 </script>
 
@@ -130,7 +130,9 @@
     text-decoration:  none;
     font-size: 4vh;
     position: fixed;
-    right: 1vw;
+    right: 2vw;
+    width: 5vh;
+    height: 5vh;
     bottom: 12vh;
   }
 
@@ -177,6 +179,9 @@
     li a:hover {
       background-color: #333;
     }
+    #top_button {
+      padding: 0;
+    }
   }
 </style>
 </head>
@@ -193,7 +198,7 @@
 <article>
   <p id="paragraph" class="markdown-body"></p>
 </article>
-<button id="top_button" onclick="goToTop()">&nbsp;^&nbsp;</button>
+<button id="top_button" onclick="goToTop()">^</button>
 
 <footer>
   <a href="https://github.com/kyu28/blog" style="color: #fff">GitHub repo</a>
