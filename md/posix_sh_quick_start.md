@@ -380,9 +380,21 @@ echo ${#a} # 6
 echo ${a#'*'} # 单引号包裹，字符串中没有*这个符号，不作更改，114514
 echo ${a%%45*}${a#*45} #　前缀和后缀拼接，去除中间的'45'，1114
 ```
+
 ---
 
-## 杂项
+## 引入其他“库”
+可以像其他语言一样引入库一样引入其他shell脚本中的内容  
+```
+source xxx.sh
+source /path/to/your/lib.sh
+. xxx.sh
+. /path/to/your/lib.sh
+```
+
+---
+
+## 后台运行
 `&` 用于将命令挂至后台运行（fork），不阻塞前台
 ```
 ping 127.0.0.1 & echo "114514"　# ping将后台执行，不阻塞echo的执行
@@ -390,5 +402,38 @@ ping 127.0.0.1 & echo "114514"　# ping将后台执行，不阻塞echo的执行
 
 ---
 
+## 动态构建命令并执行
+有时写死（hard-coded）的命令不能满足需求，此时我们可以动态构建命令  
+使用`eval`，`eval`将所传参数作为命令执行 *和Python类似*  
+```
+for i in 3 4 5; do
+  eval echo \$$i # 实现单独打印出位置为3、4、5的位置参数
+done
+```
+**注意：`eval`有存在的注入攻击的风险，请不要在有用户输入的部分使用`eval`**  
+```
+read pos
+eval echo \"Pos $pos = \${$pos}\" # 若用户输入 1}"; rm -rf /* #，会发生什么？
+```
+
+---
+
+## 转义序列
+*本文为快速入门，仅简单介绍转义序列*  
+  
+转义序列将特定的字符串和特定的操作绑定  
+输出（printf）转义序列将会执行特定的操作，如**换行、移动光标、更改颜色、清屏**等  
+POSIX Shell中一般兼容**ECMA-48**标准转义的转义序列，其中常用的是控制序列（CSI）  
+如`ESC[2A`就是一个转义序列，其含义是将光标竖直上移两行  
+其中`ESC`是转义符号，在printf中可用`\033`表示  
+```
+printf "\033[3A" # 光标上移三行  
+```
+利用转义序列可以开发出在CLI中的用户界面（GUI）程序  
+*没错，就是ncurses和curses的原理*  
+
+---
+
 ## 拓展阅读
-[POSIX Shell命令语言标准](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)
+[POSIX Shell命令语言标准](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)  
+[ECMA-48原始标准，难以阅读](https://www.ecma-international.org/publications-and-standards/standards/ecma-48/)  
