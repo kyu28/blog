@@ -3,5 +3,6 @@
   {"name": "C多线程", "path": "c_pthread.md"},
   {"name": "C变长参数列表", "path": "c_stdarg.md"},
   {"name": "Linux移动分区", "path": "move_partition.md"},
-  {"name": "Shell用作编程语言", "path": "posix_sh_quick_start.md"}
+  {"name": "Shell用作编程语言", "path": "posix_sh_quick_start.md"},
+  {"name": "ARM Linux跑x86 Windows应用", "path": "x86_win_on_arm.md"}
 ]
