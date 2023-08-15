@@ -11,18 +11,19 @@
 最直接的思路就是使用虚拟机虚拟一个完整的x86 Windows *（快感谢万能的QEMU）*  
 理论可行而且兼容性应当不错，但是要虚拟一个系统内核，额外的开销太大  
 于是普遍采用的方法是**转译**  
+苹果的Rosetta 2和Windows on Arm运行x86应用都是使用转译的方法
   
 故解决问题需要两个步骤：  
-1. 将Windows的程序转译为Linux可执行的指令
-2. 将x86机器指令转译为ARM架构机器指令
+1. 将Windows的程序转译为Linux可执行的指令  
+2. 将x86机器指令转译为ARM架构机器指令  
   
 *我才不会说是为了拿安卓平板玩游戏才折腾这个的*
 
 ---
 
 ## 运行环境
-Raspberry Pi OS (64Bit) (bullseye) @ Raspberry Pi 4B 2GB
-Termux 0.118.0 on Android 12 @ Lenovo TB138FC
+Raspberry Pi OS (64Bit) (bullseye) @ Raspberry Pi 4B 2GB  
+Termux 0.118.0 on Android 12 @ Lenovo TB138FC  
 
 ---
 
@@ -30,22 +31,21 @@ Termux 0.118.0 on Android 12 @ Lenovo TB138FC
 关于第一个步骤（Windows转译为Linux）开源社区已有相对成熟的方案--  
 **Wine**
 故以下多个方案均离不开Wine  
+  
 PS: V社在Wine的基础上开发了Proton兼容层 *（没错就是Steam Deck用的那个）*，是否可在方案中结合Proton兼容层留给读者自证
 
 关于第二个步骤（x86转译为ARM）则有多个方案  
 1. ExaGear  
 若之前折腾过安卓跑Windows应用的应该对这个工具有些印象，随着2019年其原开发的俄罗斯公司ElTechs宣布停止开发后，2020年由华为收购继续开发，自称“华为自研动态二进制翻译工具”  
 至今其依然在众多机关单位国产化后普及的ARM64架构的UOS系统设备上用于运行QQ等Windows应用  
-[原始ExaGear，具体使用留给读者自证](https://www.hikunpeng.com/zh/developer/devkit/exagear)  
+[原始ExaGear](https://www.hikunpeng.com/zh/developer/devkit/exagear)，具体使用留给读者自证  
 [ExaGear for Termux](https://github.com/ZhymabekRoman/Exagear-For-Termux)  
 
 2. QEMU User Emulation  
 利用Linux内核的binfmt_misc机制将x86程序通过QEMU打开并透明运行
 
 3. Box86 & Box64  
-GitHub上的开源项目  
-[Box86](https://github.com/ptitSeb/box86)  
-[Box64](https://github.com/ptitSeb/box64)  
+GitHub上的开源项目[Box86](https://github.com/ptitSeb/box86)和[Box64](https://github.com/ptitSeb/box64)  
 面向ARM的x86转译  
 
 ---
@@ -53,6 +53,7 @@ GitHub上的开源项目
 ## QEMU User Emulation
 **成功在树莓派上运行程序**  
 **成功在安卓上部署，但是未能稳定运行程序**  
+  
 `Linux(ARM) --QEMU, chroot/proot--> Linux(x86) --Wine--> Windows EXE(x86)`  
 在这个方案中，我们要先创建一个x86的Linux文件系统，通过chroot/proot进入该文件系统，并在该文件系统下运行Wine  
   
@@ -63,7 +64,7 @@ GitHub上的开源项目
 
 步骤：   
 1. 宿主机安装qemu-user  
-建议使用qemu 7以上否则可能会出现Segmentation Fault，Debian可以在Sid源中找到qemu 8  
+建议使用qemu 7以上，否则可能会出现Segmentation Fault，Debian可以在Sid源中找到qemu 8  
 以上述树莓派环境为例  
 `apt install qemu-user-static`  
   
@@ -113,6 +114,7 @@ winecfg
 ## Box86 & Box64
 **安卓上成功稳定运行程序**  
 *下列描述基于Android，需要安装Termux*  
+  
 ```
 Linux(ARM) --Box86 + Wine---> Windows EXE(x86)
     |
@@ -238,10 +240,10 @@ box64 wine64 winecfg
 如果使用了Termux:X11则打开该App，应该可见EXE成功运行  
 
 + Box86 & Box64 Termux自动化脚本  
-[宿主机执行脚本](resources/setup-termux-wine.sh)  
-[容器内安装脚本](resources/install-box86-wine.sh)  
-下载上述脚本至Termux中并置于同一路径下，执行宿主机执行脚本`./setup-termux-wine.sh`即可完成安装  
-安装[Termux:X11 App](https://github.com/termux/termux-x11)后  
+ 
+下载[宿主机运行脚本](resources/setup-termux-wine.sh)与[容器内安装脚本](resources/install-box86-wine.sh)
+至Termux中并置于同一路径下，执行宿主机执行脚本`./setup-termux-wine.sh`即可完成安装  
+Android中安装[Termux:X11 App](https://github.com/termux/termux-x11)后  
 1. 运行`./startx11d`  
 2. 运行`./startproot`进入PRoot容器  
 3. 找到要运行的应用并`/opt/box86wine 32 <EXE名>`即可运行32位应用，`/opt/box86wine 64 <EXE名>`即可运行64位应用  
