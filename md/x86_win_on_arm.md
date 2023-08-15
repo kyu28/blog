@@ -36,15 +36,18 @@ PS: V社在Wine的基础上开发了Proton兼容层 *（没错就是Steam Deck�
 
 关于第二个步骤（x86转译为ARM）则有多个方案  
 1. ExaGear  
+  
 若之前折腾过安卓跑Windows应用的应该对这个工具有些印象，随着2019年其原开发的俄罗斯公司ElTechs宣布停止开发后，2020年由华为收购继续开发，自称“华为自研动态二进制翻译工具”  
 至今其依然在众多机关单位国产化后普及的ARM64架构的UOS系统设备上用于运行QQ等Windows应用  
 这里给出原始[ExaGear](https://www.hikunpeng.com/zh/developer/devkit/exagear)和[ExaGear for Termux](https://github.com/ZhymabekRoman/Exagear-For-Termux)，具体使用留给读者自证  
   
 
 2. QEMU User Emulation  
+  
 利用Linux内核的binfmt_misc机制将x86程序通过QEMU打开并透明运行
 
 3. Box86 & Box64  
+  
 GitHub上的开源项目[Box86](https://github.com/ptitSeb/box86)和[Box64](https://github.com/ptitSeb/box64)，面向ARM的x86转译  
 
 ---
