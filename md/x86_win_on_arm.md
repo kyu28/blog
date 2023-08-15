@@ -21,7 +21,7 @@
 
 ---
 
-## 运行环境
+## 测试环境
 Raspberry Pi OS (64Bit) (bullseye) @ Raspberry Pi 4B 2GB  
 Termux 0.118.0 on Android 12 @ Lenovo TB138FC  
 
@@ -29,7 +29,7 @@ Termux 0.118.0 on Android 12 @ Lenovo TB138FC
 
 ## 方案
 关于第一个步骤（Windows转译为Linux）开源社区已有相对成熟的方案--  
-**Wine**
+**Wine**  
 故以下多个方案均离不开Wine  
   
 PS: V社在Wine的基础上开发了Proton兼容层 *（没错就是Steam Deck用的那个）*，是否可在方案中结合Proton兼容层留给读者自证
@@ -38,15 +38,14 @@ PS: V社在Wine的基础上开发了Proton兼容层 *（没错就是Steam Deck�
 1. ExaGear  
 若之前折腾过安卓跑Windows应用的应该对这个工具有些印象，随着2019年其原开发的俄罗斯公司ElTechs宣布停止开发后，2020年由华为收购继续开发，自称“华为自研动态二进制翻译工具”  
 至今其依然在众多机关单位国产化后普及的ARM64架构的UOS系统设备上用于运行QQ等Windows应用  
-[原始ExaGear](https://www.hikunpeng.com/zh/developer/devkit/exagear)，具体使用留给读者自证  
-[ExaGear for Termux](https://github.com/ZhymabekRoman/Exagear-For-Termux)  
+这里给出原始[ExaGear](https://www.hikunpeng.com/zh/developer/devkit/exagear)和[ExaGear for Termux](https://github.com/ZhymabekRoman/Exagear-For-Termux)，具体使用留给读者自证  
+  
 
 2. QEMU User Emulation  
 利用Linux内核的binfmt_misc机制将x86程序通过QEMU打开并透明运行
 
 3. Box86 & Box64  
-GitHub上的开源项目[Box86](https://github.com/ptitSeb/box86)和[Box64](https://github.com/ptitSeb/box64)  
-面向ARM的x86转译  
+GitHub上的开源项目[Box86](https://github.com/ptitSeb/box86)和[Box64](https://github.com/ptitSeb/box64)，面向ARM的x86转译  
 
 ---
 
@@ -231,9 +230,9 @@ export MESA_GL_VERSION_OVERRIDE=4.0 # 强制使用OpenGL 4.0，可能导致部�
   
 准备就绪就可以准备启动应用了  
 ```
-# 32位系统
+# 跑32位程序
 box86 wine winecfg
-# 64位系统
+# 跑64位程序
 box64 wine64 winecfg
 ```
   
